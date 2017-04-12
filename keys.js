@@ -1,7 +1,6 @@
 // https://www.npmjs.com/package/twitter
 // https://apps.twitter.com/app/13644906
 // https://apps.twitter.com/app/13644906/permissions
-var Twitter = require('twitter');
  
 exports.twitterKeys = {
   consumer_key: 'wXT7MIHSMWq3NvmgaNDEHF2d5',

@@ -1,16 +1,4 @@
 /* 
-Get your Twitter API keys by following these steps:
-X Step One: Visit https://apps.twitter.com/app/new
-X Step Two: Fill out the form with dummy data. Type http://google.com in the Website input. Don't fill out the Callback URL input. Then submit the form.
-X Step Three: On the next screen, click the Keys and Access Tokens tab to get your consume key and secret.
-X Copy and paste them where the <input here> tags are inside your keys.js file.
-X Step Four: At the bottom of the page, click the Create my access token button to get your access token key and secret.
-X Copy the access token key and secret displayed at the bottom of the next screen. Paste them where the <input here> tags are inside your keys.js file.
-X Make a file called random.txt.
-X Inside of random.txt put the following in with no extra characters or white space:
-X spotify-this-song,"I Want it That Way"
-X Make a JavaScript file named liri.js.
-X At the top of the liri.js file, write the code you need to grab the data from keys.js. Then store the keys in a variable.
 Make it so liri.js can take in one of the following commands:
 my-tweets
 spotify-this-song
@@ -29,13 +17,13 @@ var params = process.argv.slice(2);
 // switch case
 switch (params[0]) {
     case "my-tweets":
-        myTweets(); 
+        tweets(); 
         break;
     case "spotify-this-song":
         if (params[1]) {
             spotifyIt();
         } else {
-            spotifyIt(params[1] = "Whats my age again");
+            spotifyIt(params[1] = "The Sign");
         }
         break;
     case "movie-this":
@@ -53,13 +41,13 @@ switch (params[0]) {
 
 // tweets function https://www.npmjs.com/package/twitter
 function tweets() {
-	var client = new Twitter({
+	var client = new twitter({
         consumer_key: keys.twitterKeys.consumer_key,
         consumer_secret: keys.twitterKeys.consumer_secret,
         access_token_key: keys.twitterKeys.access_token_key,
         access_token_secret: keys.twitterKeys.access_token_secret
     });
-
+// make GET requests against the API via the convenience methods.
     client.get('statuses/user_timeline', { screen_name: 'chrislstuckey', count: 20 }, function(error, data, response) {
         if (error) throw error;
         for (var i = 0; i < data.length; i++) {
@@ -68,12 +56,11 @@ function tweets() {
             console.log(" " + " " + "My last 20 Tweets" + " " + " ")
               console.log("------------------------------"); 
                 console.log(tweetResults);
-
         };
     });
 }
 
-// spotify function
+// spotify function https://www.npmjs.com/package/spotify
 function spotifyIt() {
     spotify.search({ type: 'track', query: params[1] }, function(err, data) {
         if (err) {
@@ -82,7 +69,7 @@ function spotifyIt() {
         } else {
             var songInfo = data.tracks.items[0];
             console.log(" " + " " + "Spotify Results" + " " + " ")
-              console.log("------------------------------------------");
+              console.log("--------------------------");
             console.log("artist name", songInfo.artists[0].name);
             console.log("song name", songInfo.name);
             console.log("album name", songInfo.album.name);
@@ -93,7 +80,7 @@ function spotifyIt() {
 }
 spotifyIt();
 
-// movie function
+// movie function http://www.omdbapi.com/
 function findMovie() {
   request("http://www.omdbapi.com/?t=" + params[1] + "&y=&plot=short&r=json", function(error, response, body){
     var movieObject = JSON.parse(body);
